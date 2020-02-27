@@ -47,3 +47,7 @@ a=1, b=2, c=3
 %------ statements and functions ------
 [a, b] = squareAndCubeThisNumber(3)
 
+
+X = [ 1 1; 1 2; 1 3]
+y = [ 1; 2; 3]
+j = costFunctionJ(X, y, theta)
