@@ -1,0 +1,1 @@
+function [a, b] = squareAndCubeThisNumber(n)  a = n ^ 2;  b = n ^ 3;endfunction
