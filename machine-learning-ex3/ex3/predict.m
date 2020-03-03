@@ -7,8 +7,12 @@ function p = predict(Theta1, Theta2, X)
 m = size(X, 1);
 num_labels = size(Theta2, 1);
 
+
 % You need to return the following variables correctly 
 p = zeros(size(X, 1), 1);
+
+% a1 = X_new * Theta1';
+% a1_new = [ones(size(a1,1), 1) a1];
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Complete the following code to make predictions using
@@ -20,16 +24,25 @@ p = zeros(size(X, 1), 1);
 %       information see 'help max'. If your examples are in rows, then, you
 %       can use max(A, [], 2) to obtain the max for each row.
 %
+    % Theta1 has size 25 x 401
+    % Theta2 has size 10 x 26
+    % X_new has size 5000 x 401
 
+    X_new = [ones(size(X, 1), 1) X];
+    
+    a1 = X_new * Theta1' ;
 
+    a2 = sigmoid(a1);
 
+    a2_new = [ones(size(a2, 1), 1) a2];
 
+    a3 = sigmoid (sigmoid(a2_new) * Theta2');
+ 
+ 
+    [a3, index_max] = max(a3, [], 2);
 
-
-
-
+    p = index_max;    % vector containing labels between 1 to num_labels
 
 % =========================================================================
-
 
 end
