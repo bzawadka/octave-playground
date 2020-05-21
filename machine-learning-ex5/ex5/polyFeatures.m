@@ -15,8 +15,9 @@ X_poly = zeros(numel(X), p);
 %
 % 
 
-
-
+  X_poly = bsxfun(@power, X, 1:p);  % X_poly = bsxfun(@power, vector1, vector2); 
+                                    % where vector1 is a column vector of the feature values 'X', 
+                                    % and vector2 is a row vector of exponents from 1 to 'p'.
 
 
 
