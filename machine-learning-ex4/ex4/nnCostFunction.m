@@ -16,28 +16,63 @@ function [J grad] = nnCostFunction(nn_params, ...
 
 % Reshape nn_params back into the parameters Theta1 and Theta2, the weight matrices
 % for our 2 layer neural network
-Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
-                 hidden_layer_size, (input_layer_size + 1));
+    Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
+                     hidden_layer_size, (input_layer_size + 1));
 
-Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
-                 num_labels, (hidden_layer_size + 1));
+    Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
+                     num_labels, (hidden_layer_size + 1));
 
-% Setup some useful variables
-m = size(X, 1);
-         
-% You need to return the following variables correctly 
-J = 0;
-Theta1_grad = zeros(size(Theta1));
-Theta2_grad = zeros(size(Theta2));
+    % Setup some useful variables
+    m = size(X, 1);
+             
+    % You need to return the following variables correctly 
+    J = 0;
+    Theta1_grad = zeros(size(Theta1));
+    Theta2_grad = zeros(size(Theta2));
+
 
 % ====================== YOUR CODE HERE ======================
-% Instructions: You should complete the code by working through the
-%               following parts.
-%
 % Part 1: Feedforward the neural network and return the cost in the
 %         variable J. After implementing Part 1, you can verify that your
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
+
+      % Expand the 'y' output values into a matrix of single values by 
+      % using an eye() matrix of size num_labels, with vectorized indexing by 'y'
+      
+    y_matrix = eye(num_labels)(y,:);
+    
+    %I = eye(num_labels);
+    %Y = zeros(m, num_labels);           
+    %for i=1:m
+    % Y(i, :)= I(y(i), :);
+    % end
+
+                                      
+  
+   % Forward propagation
+   
+    X = [ones(m,1) X];                  % added column of 1s on the left    
+    a1 = X;
+
+    z2 = a1 * Theta1';
+    a2 = sigmoid(z2);
+    a2_extended = [ones(size(a2),1), a2];
+    
+    z3 = a2_extended * Theta2';
+    a3 = sigmoid(z3);
+    
+    h = a3;
+          
+ 
+    J = (1/m) * (sum(sum((-y_matrix).*log(h) - (1-y_matrix).*log(1-h))));
+    
+    reg_comp = (lambda/(2*m))*(sum(sum(Theta1(:, 2:end).^2, 2)) + sum(sum(Theta2(:,2:end).^2, 2)));
+    
+    J = J + reg_comp;
+   
+ 
+ 
 %
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
@@ -54,24 +89,36 @@ Theta2_grad = zeros(size(Theta2));
 %               over the training examples if you are implementing it for the 
 %               first time.
 %
+
+  d3 = a3 - y_matrix;
+  u = sigmoid(z2);
+  g = u .* (1 - u);
+  d2 = d3 * Theta2(:,2:end) .* g;
+  %(m x r) * (r x h) --> (m x h)
+  
+  Delta1 = d2' * a1;
+  Delta2 = d3' * a2_extended;
+  % (h x m) \cdot⋅ (m x n) --> (h x n)
+
+  Theta1_grad = Delta1 / m;
+  Theta2_grad = Delta2 / m;
+  
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
 %               backpropagation. That is, you can compute the gradients for
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
-%
 
-
-
-
-
-
-
-
-
-
-
+        
+  Theta1(:,1) = 0;      % set the 1st column of all rows to 0     
+  Theta2(:,1) = 0;
+  
+  grad1 = (lambda/m) * Theta1;
+  grad2 = (lambda/m) * Theta2;
+  
+  Theta1_grad = Theta1_grad + grad1;
+  Theta2_grad = Theta2_grad + grad2;
 
 
 

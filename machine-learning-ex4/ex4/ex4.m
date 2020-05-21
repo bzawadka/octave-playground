@@ -1,5 +1,15 @@
 %% Machine Learning Online Class - Exercise 4 Neural Network Learning
 
+%Forward propagation and cost
+% https://www.coursera.org/learn/machine-learning/discussions/all/threads/QFnrpQckEeWv5yIAC00Eog
+
+% Backpropagtion
+% https://www.coursera.org/learn/machine-learning/discussions/all/threads/a8Kce_WxEeS16yIACyoj1Q
+
+%Taste Cases
+% https://www.coursera.org/learn/machine-learning/discussions/all/threads/0SxufTSrEeWPACIACw4G5w
+
+
 %  Instructions
 %  ------------
 % 
@@ -156,7 +166,6 @@ pause;
 %
 
 fprintf('\nChecking Backpropagation (w/ Regularization) ... \n')
-
 %  Check gradients by running checkNNGradients
 lambda = 3;
 checkNNGradients(lambda);
@@ -183,10 +192,10 @@ fprintf('\nTraining Neural Network... \n')
 
 %  After you have completed the assignment, change the MaxIter to a larger
 %  value to see how more training helps.
-options = optimset('MaxIter', 50);
+options = optimset('MaxIter', 400);
 
 %  You should also try different values of lambda
-lambda = 1;
+lambda = 0.8;
 
 % Create "short hand" for the cost function to be minimized
 costFunction = @(p) nnCostFunction(p, ...
