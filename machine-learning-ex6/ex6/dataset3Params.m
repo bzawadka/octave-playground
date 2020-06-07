@@ -52,9 +52,7 @@ function [C, sigma] = dataset3Params(X, y, Xval, yval)
               C_final = C;
               sigma_final = sigma;
            
-   
           endif
-                          
                  
         endfor
     endfor
