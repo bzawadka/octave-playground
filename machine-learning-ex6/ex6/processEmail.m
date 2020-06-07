@@ -57,21 +57,21 @@ l = 0;
 while ~isempty(email_contents)
 
     % Tokenize and also get rid of any punctuation
-    [str, email_contents] = ...
+    [word, email_contents] = ...
        strtok(email_contents, ...
               [' @$/#.-:&*+=[]?!(){},''">_<;%' char(10) char(13)]);
    
     % Remove any non alphanumeric characters
-    str = regexprep(str, '[^a-zA-Z0-9]', '');
+    word = regexprep(word, '[^a-zA-Z0-9]', '');
 
     % Stem the word 
     % (the porterStemmer sometimes has issues, so we use a try catch block)
-    try str = porterStemmer(strtrim(str)); 
-    catch str = ''; continue;
+    try word = porterStemmer(strtrim(word)); 
+    catch word = ''; continue;
     end;
 
     % Skip the word if it is too short
-    if length(str) < 1
+    if length(word) < 1
        continue;
     end
 
@@ -97,25 +97,23 @@ while ~isempty(email_contents)
     %       str2). It will return 1 only if the two strings are equivalent.
     %
 
-
-
-
-
-
-
-
-
+    match = strcmp(word, vocabList);
+    current_word_indices = find(match);
+    current_word_indicesT = current_word_indices';
+    
+    word_indices = [word_indices ; current_word_indicesT];
+    
 
     % =============================================================
 
 
     % Print to screen, ensuring that the output lines are not too long
-    if (l + length(str) + 1) > 78
+    if (l + length(word) + 1) > 78
         fprintf('\n');
         l = 0;
     end
-    fprintf('%s ', str);
-    l = l + length(str) + 1;
+    fprintf('%s ', word);
+    l = l + length(word) + 1;
 
 end
 
